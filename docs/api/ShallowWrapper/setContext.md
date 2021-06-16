@@ -21,14 +21,16 @@ NOTE: can only be called on a wrapper instance that is also the root instance.
 #### Example
 
 ```jsx
-const SimpleComponent = React.createClass({
-  contextTypes: {
-    name: React.PropTypes.string,
-  },
-  render() {
-    return <div>{this.context.name}</div>;
-  },
-});
+import React from 'react';
+import PropTypes from 'prop-types';
+
+function SimpleComponent(props, context) {
+  const { name } = context;
+  return <div>{name}</div>;
+}
+SimpleComponent.contextTypes = {
+  name: PropTypes.string,
+};
 ```
 ```jsx
 const context = { name: 'foo' };
@@ -49,7 +51,7 @@ that includes a `context` specified in the options argument.
 
 #### Related Methods
 
-- [`.setState(state) => Self`](setState.md)
-- [`.setProps(props) => Self`](setProps.md)
+- [`.setState(state[, callback]) => Self`](setState.md)
+- [`.setProps(props[, callback]) => Self`](setProps.md)
 
 

@@ -22,11 +22,11 @@ the ones passed in.
 
 
 ```jsx
-const wrapper = mount(
+const wrapper = mount((
   <div>
     <div data-foo="foo" data-bar="bar">Hello</div>
   </div>
-);
+));
 
 expect(wrapper.contains(<div data-foo="foo" data-bar="bar">Hello</div>)).to.equal(true);
 
@@ -37,13 +37,13 @@ expect(wrapper.contains(<div data-foo="foo" data-bar="bar" />)).to.equal(false);
 ```
 
 ```jsx
-const wrapper = mount(
+const wrapper = mount((
   <div>
     <span>Hello</span>
     <div>Goodbye</div>
     <span>Again</span>
   </div>
-);
+));
 
 expect(wrapper.contains([
   <span>Hello</span>,
@@ -63,3 +63,4 @@ expect(wrapper.contains([
 when you are calling it you are calling it with a ReactElement or a JSX expression.
 - Keep in mind that this method determines equality based on the equality of the node's children as
 well.
+- Every attribute of the wrapped element must be matched by the element you're checking. To permit (and ignore) additional attributes on the wrapped element, use containsMatchingElement() instead.

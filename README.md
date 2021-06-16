@@ -1,30 +1,92 @@
 Enzyme
 =======
 
-[![Join the chat at https://gitter.im/airbnb/enzyme](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/airbnb/enzyme?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/enzymejs/enzyme](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/enzymejs/enzyme?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![npm Version](https://img.shields.io/npm/v/enzyme.svg)](https://www.npmjs.com/package/enzyme) [![License](https://img.shields.io/npm/l/enzyme.svg)](https://www.npmjs.com/package/enzyme) [![Build Status](https://travis-ci.org/airbnb/enzyme.svg)](https://travis-ci.org/airbnb/enzyme) [![Coverage Status](https://coveralls.io/repos/airbnb/enzyme/badge.svg?branch=master&service=github)](https://coveralls.io/github/airbnb/enzyme?branch=master)
-[![Discord Channel](https://img.shields.io/badge/discord-testing@reactiflux-738bd7.svg?style=flat-square)](https://discord.gg/0ZcbPKXt5bY8vNTA)
-
+[![npm Version](https://img.shields.io/npm/v/enzyme.svg)](https://www.npmjs.com/package/enzyme) [![License](https://img.shields.io/npm/l/enzyme.svg)](https://github.com/enzymejs/enzyme/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/enzymejs/enzyme.svg)](https://travis-ci.org/enzymejs/enzyme) [![Coverage Status](https://codecov.io/gh/enzymejs/enzyme/branch/master/graph/badge.svg)](https://codecov.io/gh/enzymejs/enzyme/branch/master)
 
 
-Enzyme is a JavaScript Testing utility for React that makes it easier to assert, manipulate,
-and traverse your React Components' output.
+Enzyme is a JavaScript Testing utility for React that makes it easier to test your React Components' output.
+You can also manipulate, traverse, and in some ways simulate runtime given the output.
 
 Enzyme's API is meant to be intuitive and flexible by mimicking jQuery's API for DOM manipulation
 and traversal.
 
+Upgrading from Enzyme 2.x or React < 16
+===========
+
+Are you here to check whether or not Enzyme is compatible with React 16? Are you currently using
+Enzyme 2.x? Great! Check out our [migration guide](/docs/guides/migration-from-2-to-3.md) for help
+moving on to Enzyme v3 where React 16 is supported.
+
+### [Installation](/docs/installation/README.md)
+
+To get started with enzyme, you can simply install it via npm. You will need to install enzyme
+along with an Adapter corresponding to the version of react (or other UI Component library) you
+are using. For instance, if you are using enzyme with React 16, you can run:
+
+```bash
+npm i --save-dev enzyme enzyme-adapter-react-16
+```
+
+Each adapter may have additional peer dependencies which you will need to install as well. For instance,
+`enzyme-adapter-react-16` has peer dependencies on `react` and `react-dom`.
+
+At the moment, Enzyme has adapters that provide compatibility with `React 16.x`, `React 15.x`,
+`React 0.14.x` and `React 0.13.x`.
+
+The following adapters are officially provided by enzyme, and have the following compatibility with
+React:
+
+| Enzyme Adapter Package | React semver compatibility |
+| --- | --- |
+| `enzyme-adapter-react-16` | `^16.4.0-0` |
+| `enzyme-adapter-react-16.3` | `~16.3.0-0` |
+| `enzyme-adapter-react-16.2` | `~16.2` |
+| `enzyme-adapter-react-16.1` | <code>~16.0.0-0 &#124;&#124; ~16.1</code> |
+| `enzyme-adapter-react-15` | `^15.5.0` |
+| `enzyme-adapter-react-15.4` | `15.0.0-0 - 15.4.x` |
+| `enzyme-adapter-react-14` | `^0.14.0` |
+| `enzyme-adapter-react-13` | `^0.13.0` |
+
+Finally, you need to configure enzyme to use the adapter you want it to use. To do this, you can use
+the top level `configure(...)` API.
+
+```js
+import Enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
+```
+
+3rd Party Adapters
+=============
+
+It is possible for the community to create additional (non-official) adapters that will make enzyme
+work with other libraries. If you have made one and it's not included in the list below, feel free
+to make a PR to this README and add a link to it! The known 3rd party adapters are:
+
+| Adapter Package | For Library | Status |
+| --- | --- | --- |
+| [`enzyme-adapter-preact-pure`](https://github.com/preactjs/enzyme-adapter-preact-pure) | [`preact`](https://github.com/developit/preact) | (stable) |
+|[`enzyme-adapter-inferno`](https://github.com/bbc/enzyme-adapter-inferno)|[`inferno`](https://github.com/infernojs/inferno)|(work in progress)|
+
+Running Enzyme Tests
+===========
+
 Enzyme is unopinionated regarding which test runner or assertion library you use, and should be
 compatible with all major test runners and assertion libraries out there. The documentation and
-examples for enzyme use [mocha](https://mochajs.org/) and [chai](http://chaijs.com/), but you
+examples for enzyme use [Mocha](https://mochajs.org/) and [Chai](http://chaijs.com/), but you
 should be able to extrapolate to your framework of choice.
 
 If you are interested in using enzyme with custom assertions and convenience functions for
 testing your React components, you can consider using:
+
 * [`chai-enzyme`](https://github.com/producthunt/chai-enzyme) with Mocha/Chai.
-* [`jasmine-enzyme`](https://github.com/blainekasten/enzyme-matchers/tree/master/packages/jasmine-enzyme) with Jasmine.
-* [`jest-enzyme`](https://github.com/blainekasten/enzyme-matchers/tree/master/packages/jest-enzyme) with Jest.
+* [`jasmine-enzyme`](https://github.com/FormidableLabs/enzyme-matchers/tree/master/packages/jasmine-enzyme) with Jasmine.
+* [`jest-enzyme`](https://github.com/FormidableLabs/enzyme-matchers/tree/master/packages/jest-enzyme) with Jest.
 * [`should-enzyme`](https://github.com/rkotze/should-enzyme) for should.js.
+* [`expect-enzyme`](https://github.com/PsychoLlama/expect-enzyme) for expect.
 
 
 [Using Enzyme with Mocha](/docs/guides/mocha.md)
@@ -35,7 +97,7 @@ testing your React components, you can consider using:
 
 [Using Enzyme with SystemJS](/docs/guides/systemjs.md)
 
-[Using Enzyme with WebPack](/docs/guides/webpack.md)
+[Using Enzyme with Webpack](/docs/guides/webpack.md)
 
 [Using Enzyme with JSDOM](/docs/guides/jsdom.md)
 
@@ -47,26 +109,6 @@ testing your React components, you can consider using:
 
 [Using Enzyme with Tape and AVA](/docs/guides/tape-ava.md)
 
-### [Installation](/docs/installation/README.md)
-
-To get started with enzyme, you can simply install it with npm:
-
-```bash
-npm i --save-dev enzyme
-```
-
-Enzyme is currently compatible with `React 15.x`, `React 0.14.x` and `React 0.13.x`. In order to
-achieve this compatibility, some dependencies cannot be explicitly listed in our `package.json`.
-
-If you are using `React 0.14` or `React 15.x`, in addition to `enzyme`, you will have to ensure that
-you also have the following npm modules installed if they were not already:
-
-```bash
-npm i --save-dev react-addons-test-utils
-npm i --save-dev react-dom
-```
-
-
 Basic Usage
 ===========
 
@@ -74,6 +116,7 @@ Basic Usage
 
 ```javascript
 import React from 'react';
+import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
@@ -83,28 +126,26 @@ import Foo from './Foo';
 describe('<MyComponent />', () => {
   it('renders three <Foo /> components', () => {
     const wrapper = shallow(<MyComponent />);
-    expect(wrapper.find(Foo)).to.have.length(3);
+    expect(wrapper.find(Foo)).to.have.lengthOf(3);
   });
 
   it('renders an `.icon-star`', () => {
     const wrapper = shallow(<MyComponent />);
-    expect(wrapper.find('.icon-star')).to.have.length(1);
+    expect(wrapper.find('.icon-star')).to.have.lengthOf(1);
   });
 
   it('renders children when passed in', () => {
-    const wrapper = shallow(
+    const wrapper = shallow((
       <MyComponent>
         <div className="unique" />
       </MyComponent>
-    );
+    ));
     expect(wrapper.contains(<div className="unique" />)).to.equal(true);
   });
 
   it('simulates click events', () => {
     const onButtonClick = sinon.spy();
-    const wrapper = shallow(
-      <Foo onButtonClick={onButtonClick} />
-    );
+    const wrapper = shallow(<Foo onButtonClick={onButtonClick} />);
     wrapper.find('button').simulate('click');
     expect(onButtonClick).to.have.property('callCount', 1);
   });
@@ -120,6 +161,7 @@ Read the full [API Documentation](/docs/api/shallow.md)
 ```javascript
 import React from 'react';
 import sinon from 'sinon';
+import { expect } from 'chai';
 import { mount } from 'enzyme';
 
 import Foo from './Foo';
@@ -134,9 +176,9 @@ describe('<Foo />', () => {
 
   it('simulates click events', () => {
     const onButtonClick = sinon.spy();
-    const wrapper = mount(
+    const wrapper = mount((
       <Foo onButtonClick={onButtonClick} />
-    );
+    ));
     wrapper.find('button').simulate('click');
     expect(onButtonClick).to.have.property('callCount', 1);
   });
@@ -157,6 +199,7 @@ Read the full [API Documentation](/docs/api/mount.md)
 
 ```javascript
 import React from 'react';
+import { expect } from 'chai';
 import { render } from 'enzyme';
 
 import Foo from './Foo';
@@ -164,7 +207,7 @@ import Foo from './Foo';
 describe('<Foo />', () => {
   it('renders three `.foo-bar`s', () => {
     const wrapper = render(<Foo />);
-    expect(wrapper.find('.foo-bar').length).to.equal(3);
+    expect(wrapper.find('.foo-bar')).to.have.lengthOf(3);
   });
 
   it('renders the title', () => {
@@ -176,6 +219,35 @@ describe('<Foo />', () => {
 
 Read the full [API Documentation](/docs/api/render.md)
 
+### React Hooks support
+
+Enzyme supports [react hooks](https://reactjs.org/docs/hooks-intro.html) with some limitations in [`.shallow()`](https://enzymejs.github.io/enzyme/docs/api/shallow.html) due to upstream issues in React's shallow renderer:
+
+* `useEffect()` and `useLayoutEffect()` don't get called in the React shallow renderer. [Related issue](https://github.com/facebook/react/issues/15275)
+
+* `useCallback()` doesn't memoize callback in React shallow renderer. [Related issue](https://github.com/facebook/react/issues/15774)
+
+#### [`ReactTestUtils.act()`](https://reactjs.org/docs/test-utils.html#act) wrap
+
+If you're using React 16.8+ and `.mount()`, Enzyme will wrap apis including [`.simulate()`](https://enzymejs.github.io/enzyme/docs/api/ReactWrapper/simulate.html), [`.setProps()`](https://enzymejs.github.io/enzyme/docs/api/ReactWrapper/setProps.html), [`.setContext()`](https://enzymejs.github.io/enzyme/docs/api/ReactWrapper/setContext.html), [`.invoke()`](https://enzymejs.github.io/enzyme/docs/api/ReactWrapper/invoke.html) with [`ReactTestUtils.act()`](https://reactjs.org/docs/test-utils.html#act) so you don't need to manually wrap it.
+
+A common pattern to trigger handlers with `.act()` and assert is:
+
+```javascript
+const wrapper = mount(<SomeComponent />);
+act(() => wrapper.prop('handler')());
+wrapper.update();
+expect(/* ... */);
+```
+
+We cannot wrap the result of `.prop()` (or `.props()`) with `.act()` in Enzyme internally since it will break the equality of the returned value.
+However, you could use `.invoke()` to simplify the code:
+
+```javascript
+const wrapper = mount(<SomeComponent />);
+wrapper.invoke('handler')();
+expect(/* ... */);
+```
 
 ### Future
 

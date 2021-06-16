@@ -1,4 +1,4 @@
-# Using Enzyme with JSDOM
+# Using enzyme with JSDOM
 
 [JSDOM](https://github.com/tmpvar/jsdom) is a JavaScript based headless browser that can be used to create a realistic testing environment.
 
@@ -11,22 +11,62 @@ gets run *before* React's code is run.
 
 As a result, a standalone script like the one below is generally a good approach:
 
+`jsdom v10~`:
+
 ```js
 /* setup.js */
 
-var jsdom = require('jsdom').jsdom;
+const { JSDOM } = require('jsdom');
+
+const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
+const { window } = jsdom;
+
+function copyProps(src, target) {
+  Object.defineProperties(target, {
+    ...Object.getOwnPropertyDescriptors(src),
+    ...Object.getOwnPropertyDescriptors(target),
+  });
+}
+
+global.window = window;
+global.document = window.document;
+global.navigator = {
+  userAgent: 'node.js',
+};
+global.requestAnimationFrame = function (callback) {
+  return setTimeout(callback, 0);
+};
+global.cancelAnimationFrame = function (id) {
+  clearTimeout(id);
+};
+copyProps(window, global);
+```
+
+Here is the sample of [jsdom old API](https://github.com/tmpvar/jsdom/blob/master/lib/old-api.md) as well.
+
+`jsdom ~<v10`:
+
+```js
+/* setup.js */
+
+const { jsdom } = require('jsdom');
 
 global.document = jsdom('');
 global.window = document.defaultView;
-Object.keys(document.defaultView).forEach((property) => {
-  if (typeof global[property] === 'undefined') {
-    global[property] = document.defaultView[property];
-  }
-});
-
 global.navigator = {
-  userAgent: 'node.js'
+  userAgent: 'node.js',
 };
+
+function copyProps(src, target) {
+  const props = Object.getOwnPropertyNames(src)
+    .filter((prop) => typeof target[prop] === 'undefined')
+    .reduce((result, prop) => ({
+      ...result,
+      [prop]: Object.getOwnPropertyDescriptor(src, prop),
+    }), {});
+  Object.defineProperties(target, props);
+}
+copyProps(document.defaultView, global);
 ```
 
 
@@ -68,10 +108,9 @@ may want to try using a browser-based test runner such as [Karma](../guides/karm
 Some times you may need to switch between different versions of node, you can use a CLI tool called
 `nvm` to quickly switch between node versions.
 
-To install NVM:
+To install `nvm`, use the curl script from http://nvm.sh, and then:
 
 ```bash
-brew install nvm
 nvm install 4
 ```
 
@@ -85,9 +124,3 @@ nvm use 0.12
 ```bash
 nvm use 4
 ```
-
-
-
-## Example Projects
-
-- [enzyme-example-mocha](https://github.com/lelandrichardson/enzyme-example-mocha)

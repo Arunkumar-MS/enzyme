@@ -12,6 +12,9 @@ an unmount/mount lifecycle.
 #### Example
 
 ```jsx
+import PropTypes from 'prop-types';
+import sinon from 'sinon';
+
 const willMount = sinon.spy();
 const didMount = sinon.spy();
 const willUnmount = sinon.spy();
@@ -23,22 +26,27 @@ class Foo extends React.Component {
     this.componentWillMount = willMount;
     this.componentDidMount = didMount;
   }
+
   render() {
+    const { id } = this.props;
     return (
-      <div className={this.props.id}>
-        {this.props.id}
+      <div className={id}>
+        {id}
       </div>
     );
   }
 }
+Foo.propTypes = {
+  id: PropTypes.string.isRequired,
+};
 const wrapper = mount(<Foo id="foo" />);
-expect(willMount.callCount).to.equal(1);
-expect(didMount.callCount).to.equal(1);
-expect(willUnmount.callCount).to.equal(0);
+expect(willMount).to.have.property('callCount', 1);
+expect(didMount).to.have.property('callCount', 1);
+expect(willUnmount).to.have.property('callCount', 0);
 wrapper.unmount();
-expect(willMount.callCount).to.equal(1);
-expect(didMount.callCount).to.equal(1);
-expect(willUnmount.callCount).to.equal(1);
+expect(willMount).to.have.property('callCount', 1);
+expect(didMount).to.have.property('callCount', 1);
+expect(willUnmount).to.have.property('callCount', 1);
 ```
 
 

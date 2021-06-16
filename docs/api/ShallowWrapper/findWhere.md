@@ -1,6 +1,6 @@
 # `.findWhere(fn) => ShallowWrapper`
 
-Finds every node in the render tree that return true for the provided predicate function.
+Finds every node in the render tree that returns true for the provided predicate function.
 
 
 #### Arguments
@@ -20,8 +20,8 @@ nodes.
 
 ```jsx
 const wrapper = shallow(<MyComponent />);
-const complexComponents = wrapper.findWhere(n => n.type() !== 'string');
-expect(complexComponents).to.have.length(8);
+const complexComponents = wrapper.findWhere((n) => n.type() !== 'string');
+expect(complexComponents).to.have.lengthOf(8);
 ```
 
 

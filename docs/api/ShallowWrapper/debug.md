@@ -1,8 +1,14 @@
-# `.debug() => String`
+# `.debug([options]) => String`
 
 Returns an HTML-like string of the wrapper for debugging purposes. Useful to print out to the
 console when tests are not passing when you expect them to.
 
+
+#### Arguments
+
+`options` (`Object` [optional]):
+- `options.ignoreProps`: (`Boolean` [optional]): Whether props should be omitted in the resulting string. Props are included by default.
+- `options.verbose`: (`Boolean` [optional]): Whether arrays and objects passed as props should be verbosely printed.
 
 #### Returns
 
@@ -12,18 +18,26 @@ console when tests are not passing when you expect them to.
 
 #### Examples
 ```jsx
-class Book extends React.Component {
-  render() {
-    const { title, cover } = this.props;
-    return (
-      <div>
-        <h1 className="title">{title}</h1>
-        {cover && <BookCover cover={cover} />}
-      </div>
-    );
-  }
+function Book({ title, pages }) {
+  return (
+    <div>
+      <h1 className="title">{title}</h1>
+      {pages && (
+        <NumberOfPages
+          pages={pages}
+          object={{ a: 1, b: 2 }}
+        />
+      )}
+    </div>
+  );
 }
-
+Book.propTypes = {
+  title: PropTypes.string.isRequired,
+  pages: PropTypes.number,
+};
+Book.defaultProps = {
+  pages: null,
+};
 ```
 ```jsx
 const wrapper = shallow(<Book title="Huckleberry Finn" />);
@@ -37,22 +51,53 @@ Outputs to console:
 ```
 
 ```jsx
-const wrapper = shallow(
+const wrapper = shallow((
   <Book
     title="Huckleberry Finn"
-    cover={{
-      url: 'http://some.url/to/img.png',
-      width: 40,
-      height: 80
-    }}
+    pages="633 pages"
   />
-);
+));
 console.log(wrapper.debug());
 ```
 Outputs to console:
 ```text
 <div>
- <h1 className="title">Huckleberry Finn</h1>
- <BookCover cover={{...}} />
+  <h1 className="title">Huckleberry Finn</h1>
+  <NumberOfPages pages="633 pages" object={{...}}/>
+</div>
+```
+
+```jsx
+const wrapper = shallow((
+  <Book
+    title="Huckleberry Finn"
+    pages="633 pages"
+  />
+));
+console.log(wrapper.debug({ ignoreProps: true }));
+```
+Outputs to console:
+```text
+<div>
+  <h1>Huckleberry Finn</h1>
+  <NumberOfPages />
+</div>
+```
+
+
+```jsx
+const wrapper = shallow((
+  <Book
+    title="Huckleberry Finn"
+    pages="633 pages"
+  />
+));
+console.log(wrapper.debug({ verbose: true }));
+```
+Outputs to console:
+```text
+<div>
+  <h1 className="title">Huckleberry Finn</h1>
+  <NumberOfPages pages="633 pages" object={{ a: 1, b: 2 }}/>
 </div>
 ```

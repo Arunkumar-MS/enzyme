@@ -1,15 +1,9 @@
 {
-  "gitbook": "2.4.3",
+  "gitbook": "3.2.2",
   "title": "Enzyme",
   "description": "React Testing",
-  "structure": {
-    "summary": "docs/README.md",
-    "glossary": "docs/GLOSSARY.md"
-  },
   "plugins": [
     "edit-link",
-    "prism@2.0.0",
-    "-highlight",
     "github",
     "-search",
     "codeblock-disable-glossary",
@@ -18,11 +12,11 @@
   ],
   "pluginsConfig": {
     "edit-link": {
-      "base": "https://github.com/airbnb/enzyme/tree/master",
+      "base": "https://github.com/enzymejs/enzyme/tree/master",
       "label": "Edit This Page"
     },
     "github": {
-      "url": "https://github.com/airbnb/enzyme/"
+      "url": "https://github.com/enzymejs/enzyme/"
     }
   }
 }

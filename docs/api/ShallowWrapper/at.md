@@ -19,11 +19,13 @@ Returns a wrapper around the node at a given index of the current wrapper.
 
 ```jsx
 const wrapper = shallow(<MyComponent />);
-expect(wrapper.find(Foo).at(0).props().foo).to.equal("bar");
+expect(wrapper.find(Foo).at(0).props().foo).to.equal('bar');
 ```
 
 
 
 #### Related Methods
 
-- [`.get(index) => ReactElement`](get.md)
+- [`.get(index) => ReactElement`](get.md) - same, but returns the React node itself, with no wrapper.
+- [`.first() => ShallowWrapper`](first.md) - same as at(0)
+- [`.last() => ShallowWrapper`](last.md)

@@ -22,11 +22,11 @@ the ones passed in.
 
 
 ```jsx
-const wrapper = shallow(
+const wrapper = shallow((
   <div>
     <div data-foo="foo" data-bar="bar">Hello</div>
   </div>
-);
+));
 
 expect(wrapper.contains(<div data-foo="foo" data-bar="bar">Hello</div>)).to.equal(true);
 
@@ -37,13 +37,13 @@ expect(wrapper.contains(<div data-foo="foo" data-bar="bar" />)).to.equal(false);
 ```
 
 ```jsx
-const wrapper = shallow(
+const wrapper = shallow((
   <div>
     <span>Hello</span>
     <div>Goodbye</div>
     <span>Again</span>
   </div>
-);
+));
 
 expect(wrapper.contains([
   <span>Hello</span>,
@@ -56,6 +56,17 @@ expect(wrapper.contains([
 ])).to.equal(false);
 ```
 
+```jsx
+const calculatedValue = 2 + 2;
+
+const wrapper = shallow((
+  <div>
+    <div data-foo="foo" data-bar="bar">{calculatedValue}</div>
+  </div>
+));
+
+expect(wrapper.contains(<div data-foo="foo" data-bar="bar">{4}</div>)).to.equal(true);
+```
 
 #### Common Gotchas
 

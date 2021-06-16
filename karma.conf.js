@@ -1,9 +1,57 @@
-/* eslint-disable no-var,prefer-arrow-callback,vars-on-top */
+/* eslint-disable no-var,prefer-arrow-callback,vars-on-top, import/no-extraneous-dependencies */
 
-require('babel-register');
+'use strict';
+
+require('@babel/register');
 
 var IgnorePlugin = require('webpack').IgnorePlugin;
-var REACT013 = require('./src/version').REACT013;
+var is = require('./packages/enzyme-test-suite/build/_helpers/version').is;
+
+function getPlugins() {
+  const adapter13 = new IgnorePlugin(/enzyme-adapter-react-13$/);
+  const adapter14 = new IgnorePlugin(/enzyme-adapter-react-14$/);
+  const adapter154 = new IgnorePlugin(/enzyme-adapter-react-15\.4$/);
+  const adapter15 = new IgnorePlugin(/enzyme-adapter-react-15$/);
+  const adapter161 = new IgnorePlugin(/enzyme-adapter-react-16.1$/);
+  const adapter162 = new IgnorePlugin(/enzyme-adapter-react-16.2$/);
+  const adapter163 = new IgnorePlugin(/enzyme-adapter-react-16.3$/);
+  const adapter16 = new IgnorePlugin(/enzyme-adapter-react-16$/);
+
+  var plugins = [
+    adapter13,
+    adapter14,
+    adapter154,
+    adapter15,
+    adapter16,
+  ];
+
+  function not(x) {
+    return function notPredicate(y) {
+      return y !== x;
+    };
+  }
+
+  // we want to ignore all of the adapters *except* the one we are currently using
+  if (is('0.13.x')) {
+    plugins = plugins.filter(not(adapter13));
+  } else if (is('0.14.x')) {
+    plugins = plugins.filter(not(adapter14));
+  } else if (is('^15.5.0')) {
+    plugins = plugins.filter(not(adapter15));
+  } else if (is('^15.0.0-0')) {
+    plugins = plugins.filter(not(adapter154));
+  } else if (is('~16.0.0-0 || ~16.1')) {
+    plugins = plugins.filter(not(adapter161));
+  } else if (is('~16.2')) {
+    plugins = plugins.filter(not(adapter162));
+  } else if (is('~16.3.0-0')) {
+    plugins = plugins.filter(not(adapter163));
+  } else if (is('^16.4.0-0')) {
+    plugins = plugins.filter(not(adapter16));
+  }
+
+  return plugins;
+}
 
 module.exports = function karma(config) {
   config.set({
@@ -29,11 +77,11 @@ module.exports = function karma(config) {
     reporters: ['dots'],
 
     files: [
-      'test/*.{jsx,js}',
+      'packages/enzyme-test-suite/build/*.js',
     ],
 
     exclude: [
-      'test/_*.{jsx,js}',
+      'packages/enzyme-test-suite/build/_helpers/index.js',
     ],
 
     browsers: [
@@ -42,7 +90,7 @@ module.exports = function karma(config) {
     ],
 
     preprocessors: {
-      'test/*.{jsx,js}': ['webpack', 'sourcemap'],
+      'packages/enzyme-test-suite/build/*.js': ['webpack', 'sourcemap'],
     },
 
     webpack: {
@@ -71,18 +119,7 @@ module.exports = function karma(config) {
           },
         ],
       },
-      plugins: [
-        /*
-        this list of conditional IgnorePlugins mirrors the conditional
-        requires in src/react-compat.js and exists to avoid error
-        output from the webpack compilation
-        */
-        !REACT013 && new IgnorePlugin(/react\/lib\/ExecutionEnvironment/),
-        !REACT013 && new IgnorePlugin(/react\/lib\/ReactContext/),
-        !REACT013 && new IgnorePlugin(/react\/addons/),
-        REACT013 && new IgnorePlugin(/react-dom/),
-        REACT013 && new IgnorePlugin(/react-addons-test-utils/),
-      ].filter(function filterPlugins(plugin) { return plugin !== false; }),
+      plugins: getPlugins(),
     },
 
     webpackServer: {

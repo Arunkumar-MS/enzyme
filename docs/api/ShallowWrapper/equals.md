@@ -21,6 +21,10 @@ like the one passed in.
 
 
 ```jsx
+function MyComponent() {
+  return <div className="foo bar" />;
+}
+
 const wrapper = shallow(<MyComponent />);
 expect(wrapper.equals(<div className="foo bar" />)).to.equal(true);
 ```
@@ -32,4 +36,4 @@ expect(wrapper.equals(<div className="foo bar" />)).to.equal(true);
 when you are calling it you are calling it with a ReactElement or a JSX expression.
 - Keep in mind that this method determines equality based on the equality of the node's children as
 well.
-
+- Following React's behavior, `.equals()` ignores properties whose values are `undefined`.

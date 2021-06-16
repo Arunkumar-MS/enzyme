@@ -1,7 +1,7 @@
 # `.name() => String|null`
 
 Returns the name of the current node of this wrapper. If it's a composite component, this will be
-the name of the top-most rendered component. If it's native DOM node, it will be a string of the
+the name of the top-most rendered component. If it's a native DOM node, it will be a string of the
 tag name. If it's `null`, it will be `null`.
 
 The order of precedence on returning the name is: `type.displayName` -> `type.name` -> `type`.
@@ -18,19 +18,23 @@ Note: can only be called on a wrapper of a single node.
 #### Examples
 
 ```jsx
-const wrapper = shallow(<div/>);
+const wrapper = shallow(<div />);
 expect(wrapper.name()).to.equal('div');
 ```
 
 ```jsx
-const SomeWrappingComponent = () => <Foo />;
+function SomeWrappingComponent() {
+  return <Foo />;
+}
 const wrapper = shallow(<SomeWrappingComponent />);
 expect(wrapper.name()).to.equal('Foo');
 ```
 
 ```jsx
 Foo.displayName = 'A cool custom name';
-const SomeWrappingComponent = () => <Foo />;
+function SomeWrappingComponent() {
+  return <Foo />;
+}
 const wrapper = shallow(<SomeWrappingComponent />);
 expect(wrapper.name()).to.equal('A cool custom name');
 ```
